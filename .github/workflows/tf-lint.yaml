@@ -1,0 +1,14 @@
+name: terraform validation
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  terraform-linter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Terraform lint
+        uses: actionshub/terraform-lint@main
