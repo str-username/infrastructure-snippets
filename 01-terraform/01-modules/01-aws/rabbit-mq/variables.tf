@@ -82,3 +82,9 @@ variable "maintenance_window" {
     time_zone   = "CET"
   }
 }
+
+variable "encryption_enabled" {
+  type        = bool
+  description = "Enabled self managed kms key encryption"
+  default     = false
+}

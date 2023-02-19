@@ -22,6 +22,10 @@ resource "aws_mq_broker" "main" {
     }
   }
 
+  encryption_options {
+    kms_key_id        = var.encryption_enabled        == true ? aws_kms_key.this[0].id : null
+    use_aws_owned_key = false
+  }
 
   logs {
     general = var.logs_general
@@ -32,4 +36,22 @@ resource "aws_mq_broker" "main" {
     time_of_day = var.maintenance_window.time_of_day
     time_zone   = var.maintenance_window.time_zone
   }
+}
+
+resource "aws_kms_key" "this" {
+  count                   = var.encryption_enabled == true ? 1 : 0
+  description             = "KMS key for ${var.name} RabbitMQ brokers"
+  key_usage               = "ENCRYPT_DECRYPT"
+  deletion_window_in_days = 14
+  is_enabled              = true
+  enable_key_rotation     = false
+  multi_region            = false
+  tags                    = var.tags
+}
+
+
+resource "aws_kms_alias" "this" {
+  count         = var.encryption_enabled == true ? 1 : 0
+  name          = "alias/rabbitmq-${var.name}-key"
+  target_key_id = aws_kms_key.this[0].id
 }
