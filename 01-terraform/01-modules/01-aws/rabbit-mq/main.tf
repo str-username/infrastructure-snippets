@@ -23,7 +23,7 @@ resource "aws_mq_broker" "main" {
   }
 
   encryption_options {
-    kms_key_id        = var.encryption_enabled        == true ? aws_kms_key.this[0].id : null
+    kms_key_id        = var.encryption_enabled == true ? aws_kms_key.this[0].id : null
     use_aws_owned_key = false
   }
 
