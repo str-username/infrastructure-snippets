@@ -1,12 +1,12 @@
 resource "aws_security_group" "main" {
   for_each    = var.settings
-  name        = each.value.name
+  name              = each.value.name
   description = lookup(each.value, "description", null)
   vpc_id      = each.value.vpc_id
-  tags        = lookup(each.value, "tags", {})
+  tags               = lookup(each.value, "tags", {})
 
   dynamic "ingress" {
-    for_each = lookup(each.value, "ingress", {})
+          for_each = lookup(each.value, "ingress", {})
     content {
       from_port        = ingress.value.from_port
       to_port          = ingress.value.to_port
