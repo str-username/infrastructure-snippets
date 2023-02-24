@@ -9,16 +9,17 @@ variable "vpc" {
 
 variable "subnets" {
   description = "Subnets settings"
-  type = object({
+  type = map(object({
     v4_cidr_blocks = list(string)
     zone           = string
     name           = string
-    description    = optional(string, null)
+    description    = optional(string)
     dhcp_options   = optional(map(any), {})
-  })
+  }))
 }
 
 variable "labels" {
   description = "Global labes that's add to vpc, subnets, rt, gw"
   type        = map(any)
+  default     = {}
 }

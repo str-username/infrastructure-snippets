@@ -1,6 +1,6 @@
 resource "yandex_vpc_network" "this" {
   name        = var.vpc.name
-  description = var.vcp.description
+  description = var.vpc.description
   folder_id   = var.vpc.folder_id
   labels      = var.labels
 }
@@ -8,15 +8,16 @@ resource "yandex_vpc_network" "this" {
 resource "yandex_vpc_subnet" "main" {
   for_each       = var.subnets
   network_id     = yandex_vpc_network.this.id
-  v4_cidr_blocks = var.subnets.v4_cidr_blocks
-  zone           = var.subnets.zone
-  name           = var.subnets.name
-  description    = var.subnets.description
+  v4_cidr_blocks = each.value.v4_cidr_blocks
+  zone           = each.value.zone
+  name           = each.value.name
+  description    = each.value.description
   folder_id      = var.vpc.folder_id
   labels         = var.labels
   route_table_id = yandex_vpc_route_table.this.id
+
   dynamic "dhcp_options" {
-    for_each = var.vpc.dhcp_options
+    for_each = lookup(each.value, "dhcp_options")
     content {
       domain_name         = dhcp_options.value.domain
       domain_name_servers = dhcp_options.value.name_servers
