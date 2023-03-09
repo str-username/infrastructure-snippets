@@ -31,7 +31,7 @@ resource "aws_security_group" "this" {
   description = "Allow access to elasticace cluster from ${var.allowed_access_from_name}"
   name        = "${var.cluster_name}-ingress-allowed"
   vpc_id      = var.vpc_id
-  tags        = merge({ "Name" = "${var.cluster_name}-ingress-allowed"}, var.tags)
+  tags        = merge({ "Name" = "${var.cluster_name}-ingress-allowed" }, var.tags)
 
   ingress {
     from_port   = 6432
